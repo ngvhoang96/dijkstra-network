@@ -5,6 +5,7 @@ import javax.swing.*;
 public class Driver extends JFrame {
 	Driver() {
 		setContentPane(new AppPanel());
+
 		setSize(1000, 600);
 		setVisible(true);
 		setLocationRelativeTo(null);

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ReportPanel extends JPanel {
-	ReportPanel() {
+	ReportPanel(AppActionListener appActionListener) {
 		setBackground(Color.lightGray);
 		setLayout(null);
 		setBounds(600, 0, 400, 600);

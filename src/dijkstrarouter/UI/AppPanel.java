@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AppPanel extends JPanel {
+	private final NetworkPanel networkPanel;
+
 	AppPanel() {
 		setLayout(null);
 		setBackground(Color.BLACK);
@@ -11,7 +13,13 @@ public class AppPanel extends JPanel {
 		JButton theButton = new JButton("test");
 		add(theButton);
 
-		add(new ReportPanel());
-		add(new NetworkPanel());
+		AppActionListener appActionListener = new AppActionListener(this);
+		networkPanel = new NetworkPanel(appActionListener);
+		add(networkPanel);
+		add(new ReportPanel(appActionListener));
+	}
+
+	public NetworkPanel getNetworkPanel() {
+		return networkPanel;
 	}
 }
