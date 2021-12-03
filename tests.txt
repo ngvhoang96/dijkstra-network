@@ -1,0 +1,4 @@
+xneighbors is a list of other nodes
+xa connection is two way
+xa connection has a cost
+-a node can connect to multiple nodes
