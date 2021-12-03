@@ -2,8 +2,10 @@ xneighbors is a list of other nodes
 xa connection is two way
 xa connection has a cost
 xa node can connect to multiple nodes
--cost should update on new connection
+xcannot connect to the same node twice
+xcost should update on new connection
+xnode can find closest neighbor
 
 xnetwork has many nodes
--each node shows infinity cost to other node on init
+xeach node shows infinity cost to other node on init
 xeach node shows costs to other nodes in the network

@@ -3,8 +3,7 @@ package dijkstrarouter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestNode {
 	Node nodeA;
@@ -23,14 +22,15 @@ public class TestNode {
 	void neighborsIsAListOfOtherNodes() {
 		nodeA.connectWith(new Node("B"), 2);
 
-		assertEquals("B", nodeA.getNeighbors().get(0));
+		assertEquals("B", nodeA.getNeighbors().get(0).getNodeName());
 	}
 
 	@Test
 	void aConnectionHasACost() {
-		nodeA.connectWith(new Node("B"), 2);
+		Node nodeB = new Node("B");
+		nodeA.connectWith(nodeB, 2);
 
-		assertEquals(2, nodeA.getCostTo("B"));
+		assertEquals(2, nodeA.getCostTo(nodeB));
 	}
 
 	@Test
@@ -39,8 +39,8 @@ public class TestNode {
 
 		nodeA.connectWith(nodeB, 3);
 
-		assertEquals("A", nodeB.getNeighbors().get(0));
-		assertEquals(3, nodeB.getCostTo("A"));
+		assertEquals("A", nodeB.getNeighbors().get(0).getNodeName());
+		assertEquals(3, nodeB.getCostTo(nodeA));
 	}
 
 	@Test
@@ -51,8 +51,16 @@ public class TestNode {
 		nodeA.connectWith(nodeB, 3);
 		nodeA.connectWith(nodeC, 1);
 
-		assertEquals(1, nodeC.getCostTo("A"));
-		assertEquals(3, nodeB.getCostTo("A"));
+		assertEquals(1, nodeC.getCostTo(nodeA));
+		assertEquals(3, nodeB.getCostTo(nodeA));
+	}
+
+	@Test
+	void cannotConnectToTheSameNodeTwice() {
+		Node nodeB = new Node("B");
+
+		nodeA.connectWith(nodeB, 1);
+		assertThrows(RuntimeException.class, () -> nodeA.connectWith(nodeB, 3));
 	}
 
 	@Test
@@ -66,8 +74,17 @@ public class TestNode {
 		assertEquals(1, nodeA.getNeighbors().size());
 		assertEquals(1, nodeB.getNeighbors().size());
 
-		assertEquals(4, nodeA.getCostTo("B"));
-		assertEquals(4, nodeB.getCostTo("A"));
+		assertEquals(4, nodeA.getCostTo(nodeB));
+		assertEquals(4, nodeB.getCostTo(nodeA));
+	}
+
+	@Test
+	void distanceIsDifferentFromCostAndCanBeSet() {
+		Node nodeB = new Node("B");
+
+		nodeB.setDistanceFrom(nodeA, 3);
+
+		assertEquals(3, nodeB.getDistanceFrom(nodeA));
 	}
 
 	@Test
@@ -76,5 +93,10 @@ public class TestNode {
 		nodeA.connectWith(new Node("D"), 3);
 
 		assertEquals("B", nodeA.findClosetNeighbor());
+	}
+
+	@Test
+	void findClosestNeighborOnEmptyNeighbor() {
+		assertEquals("none", nodeA.findClosetNeighbor());
 	}
 }

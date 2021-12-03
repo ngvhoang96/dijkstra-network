@@ -9,8 +9,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Node {
 	private final String thisNodeName;
-	private final List<String> neighbors;
-	private final HashMap<String, Integer> edgesList;
+	private final List<Node> neighbors;
+	private final HashMap<Node, Integer> edgesList;
+	private final int INFINITY = 9999;
+	private int distanceFromOrigin;
+	private Node previousNode;
 
 	public Node(String nodeName) {
 		thisNodeName = nodeName;
@@ -18,32 +21,58 @@ public class Node {
 		edgesList = new HashMap<>();
 	}
 
-	public void connectWith(Node otherNode, int cost) {
-		neighbors.add(otherNode.getNodeName());
-		edgesList.put(otherNode.getNodeName(), cost);
+	public Node getPreviousNode() {
+		return Optional.ofNullable(previousNode).orElse(null);
+	}
 
-		otherNode.getNeighbors().add(thisNodeName);
-		otherNode.edgesList.put(thisNodeName, cost);
+	public void setPreviousNode(Node thePreviousNode) {
+		previousNode = thePreviousNode;
+	}
+
+	public int getDistanceFrom(Node origin) {
+		if (distanceFromOrigin != 0) {
+			return distanceFromOrigin;
+		} else if (getCostTo(origin) != INFINITY) {
+			return getCostTo(origin);
+		} else {
+			return INFINITY;
+		}
+	}
+
+	public void setDistanceFrom(Node origin, int distance) {
+		distanceFromOrigin = distance;
+	}
+
+	public void connectWith(Node otherNode, int cost) {
+		if (neighbors.contains(otherNode)) {
+			throw new RuntimeException("Please disconnect node " + otherNode.getNodeName() + " before reconnect");
+		} else {
+			neighbors.add(otherNode);
+			edgesList.put(otherNode, cost);
+
+			otherNode.getNeighbors().add(this);
+			otherNode.edgesList.put(this, cost);
+		}
 	}
 
 	public String getNodeName() {
 		return thisNodeName;
 	}
 
-	public List<String> getNeighbors() {
+	public List<Node> getNeighbors() {
 		return neighbors;
 	}
 
-	public int getCostTo(String otherNodeName) {
-		return Optional.ofNullable(edgesList.get(otherNodeName)).orElse(9999);
+	public int getCostTo(Node otherNode) {
+		return Optional.ofNullable(edgesList.get(otherNode)).orElse(INFINITY);
 	}
 
 	public void disconnectWith(Node otherNode) {
-		neighbors.remove(otherNode.getNodeName());
-		edgesList.remove(otherNode.getNodeName());
+		neighbors.remove(otherNode);
+		edgesList.remove(otherNode);
 
-		otherNode.neighbors.remove(thisNodeName);
-		otherNode.edgesList.remove(thisNodeName);
+		otherNode.neighbors.remove(this);
+		otherNode.edgesList.remove(this);
 	}
 
 	@Override
@@ -53,7 +82,7 @@ public class Node {
 
 	public String findClosetNeighbor() {
 		AtomicInteger smallestCost = new AtomicInteger(-1);
-		AtomicReference<String> closestNeighbor = new AtomicReference<>("");
+		AtomicReference<Node> closestNeighbor = new AtomicReference<>(new Node("none"));
 
 		edgesList.forEach((k, v) -> {
 			if (smallestCost.get() == -1 || v < smallestCost.get()) {
@@ -62,6 +91,6 @@ public class Node {
 			}
 		});
 
-		return closestNeighbor.get();
+		return closestNeighbor.toString();
 	}
 }
