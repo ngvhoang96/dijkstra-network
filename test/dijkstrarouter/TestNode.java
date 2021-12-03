@@ -54,4 +54,27 @@ public class TestNode {
 		assertEquals(1, nodeC.getCostTo("A"));
 		assertEquals(3, nodeB.getCostTo("A"));
 	}
+
+	@Test
+	void costShouldUpdateOnNewConnection() {
+		Node nodeB = new Node("B");
+
+		nodeA.connectWith(nodeB, 2);
+		nodeA.disconnectWith(nodeB);
+		nodeA.connectWith(nodeB, 4);
+
+		assertEquals(1, nodeA.getNeighbors().size());
+		assertEquals(1, nodeB.getNeighbors().size());
+
+		assertEquals(4, nodeA.getCostTo("B"));
+		assertEquals(4, nodeB.getCostTo("A"));
+	}
+
+	@Test
+	void nodeCanFindClosestNeighbor() {
+		nodeA.connectWith(new Node("B"), 1);
+		nodeA.connectWith(new Node("D"), 3);
+
+		assertEquals("B", nodeA.findClosetNeighbor());
+	}
 }

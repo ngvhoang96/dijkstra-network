@@ -1,4 +1,9 @@
 xneighbors is a list of other nodes
 xa connection is two way
 xa connection has a cost
--a node can connect to multiple nodes
+xa node can connect to multiple nodes
+-cost should update on new connection
+
+xnetwork has many nodes
+-each node shows infinity cost to other node on init
+xeach node shows costs to other nodes in the network
