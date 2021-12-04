@@ -1,5 +1,7 @@
 package dijkstrarouter.UI;
 
+import dijkstrarouter.Node;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,17 +11,19 @@ import java.awt.event.MouseMotionListener;
 public class Router extends JPanel implements MouseListener, MouseMotionListener {
 	private final NetworkPanel networkPanel;
 	private final String routerName;
+	private final Node node;
 	private int xPos, yPos;
 	private boolean makingLink;
 	private int routerPosX;
 	private int routerPosY;
 
+	Router(Node node, NetworkPanel networkPanel) {
+		routerName = node.getNodeName();
+		this.node = node;
 
-	Router(String routerName, NetworkPanel networkPanel) {
-		this.routerName = routerName;
-		setBounds(0, 0, 40, 40);
-		routerPosX = 20;
-		routerPosY = 20;
+		setBounds(280, 280, 40, 40);
+		routerPosX = 300;
+		routerPosY = 300;
 		setBackground(Color.ORANGE);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -30,6 +34,10 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 		add(routerLabel);
 
 		this.networkPanel = networkPanel;
+	}
+
+	public Node getNode() {
+		return node;
 	}
 
 	public Point getPosPoint() {
@@ -78,6 +86,7 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 			if (networkPanel.hoveringRouter != null && !networkPanel.hoveringRouter.routerName.equals(routerName)) {
 				String cost = JOptionPane.showInputDialog(String.format("What's the cost of %s ?", routerName + networkPanel.hoveringRouter));
 				networkPanel.connect(routerName + networkPanel.hoveringRouter, networkPanel.hoveringRouter, this, cost);
+				node.connectWith(networkPanel.hoveringRouter.getNode(), Integer.parseInt(cost));
 				makingLink = false;
 				networkPanel.drawAgain();
 			}

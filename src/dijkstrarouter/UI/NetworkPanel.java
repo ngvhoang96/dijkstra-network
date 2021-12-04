@@ -3,12 +3,13 @@ package dijkstrarouter.UI;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 
 public class NetworkPanel extends JPanel {
 	static JLabel editModeLabel;
+	private final HashMap<String, Edge> edgeList;
 	public Router hoveringRouter;
 	private String editMode;
-	private HashMap<String, Edge> edgeList;
 
 	NetworkPanel(AppActionListener appActionListener) {
 		setLayout(null);
@@ -59,6 +60,18 @@ public class NetworkPanel extends JPanel {
 		edgeList.forEach((s, edge) -> edge.draw(getGraphics()));
 	}
 
+	public void drawSelectedEdges(List<String> selectedEdges) {
+		super.paint(getGraphics());
+		edgeList.forEach((s, edge) -> {
+			String reserveS = new StringBuilder().append(s).reverse().toString();
+			if (selectedEdges.contains(s) || selectedEdges.contains(reserveS)) {
+				edge.drawSelectedEdge(getGraphics());
+			} else {
+				edge.draw(getGraphics());
+			}
+		});
+	}
+
 
 	private static class Edge {
 		Router origin;
@@ -77,11 +90,15 @@ public class NetworkPanel extends JPanel {
 			return new Point(xPos, yPos);
 		}
 
-		void draw(Graphics g, Color color) {
-			g.setColor(color);
+		void drawSelectedEdge(Graphics g) {
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setStroke(new BasicStroke(3f));
+			g2d.setColor(Color.GREEN);
 			Point randomOrigin = randomizedPoint(origin.getPosPoint());
 			Point randomDestination = randomizedPoint(destination.getPosPoint());
 			g.drawLine(randomOrigin.x, randomOrigin.y, randomDestination.x, randomDestination.y);
+			g2d.setColor(Color.black);
+			g.drawString(cost, (randomDestination.x + randomOrigin.x) / 2, (randomDestination.y + randomOrigin.y) / 2);
 		}
 
 		void draw(Graphics g) {

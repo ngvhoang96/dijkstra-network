@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class AppPanel extends JPanel {
 	private final NetworkPanel networkPanel;
+	private final ReportPanel reportPanel;
 
 	AppPanel() {
 		setLayout(null);
@@ -15,11 +16,16 @@ public class AppPanel extends JPanel {
 
 		AppActionListener appActionListener = new AppActionListener(this);
 		networkPanel = new NetworkPanel(appActionListener);
+		reportPanel = new ReportPanel(appActionListener);
 		add(networkPanel);
-		add(new ReportPanel(appActionListener));
+		add(reportPanel);
 	}
 
 	public NetworkPanel getNetworkPanel() {
 		return networkPanel;
+	}
+
+	public ReportPanel getReportPanel() {
+		return reportPanel;
 	}
 }
