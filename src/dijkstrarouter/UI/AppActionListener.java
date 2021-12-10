@@ -23,7 +23,7 @@ public class AppActionListener implements ActionListener {
 			case "toggle edit mode" -> appPanel.getNetworkPanel().toggleEditMode();
 			case "add a node" -> {
 				String nodeName = JOptionPane.showInputDialog("Node name");
-				if (nodeName.length() > 0) {
+				if (nodeName.length() == 1) {
 					try {
 						Node newNode = new Node(nodeName);
 						network.add(newNode);
@@ -33,6 +33,8 @@ public class AppActionListener implements ActionListener {
 					} catch (RuntimeException ex) {
 						JOptionPane.showMessageDialog(appPanel, ex.getMessage());
 					}
+				} else {
+					JOptionPane.showMessageDialog(appPanel, "Please enter 1 character for the name");
 				}
 			}
 			case "run algo" -> {

@@ -69,7 +69,6 @@ public class NetworkPanel extends JPanel {
 	}
 
 	public void drawSelectedEdges(List<String> selectedEdges) {
-		System.out.println(selectedEdges);
 		super.paint(getGraphics());
 		edgeList.forEach((s, edge) -> {
 			String reserveS = new StringBuilder().append(s).reverse().toString();

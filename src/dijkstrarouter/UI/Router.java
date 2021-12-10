@@ -64,7 +64,6 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-
 	}
 
 	@Override
@@ -85,7 +84,7 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 		if (makingLink) {
 			if (networkPanel.hoveringRouter != null && !networkPanel.hoveringRouter.routerName.equals(routerName)) {
 				String cost = JOptionPane.showInputDialog(String.format("What's the cost of %s ?", routerName + networkPanel.hoveringRouter));
-				if (cost.length() > 0) {
+				if (cost.length() > 0 && !cost.equals("0")) {
 					try {
 						node.connectWith(networkPanel.hoveringRouter.getNode(), Integer.parseInt(cost));
 						networkPanel.connect(routerName + networkPanel.hoveringRouter, this, networkPanel.hoveringRouter, cost);
@@ -94,6 +93,8 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 					} catch (RuntimeException ex) {
 						JOptionPane.showMessageDialog(networkPanel, ex.getMessage());
 					}
+				} else {
+					JOptionPane.showMessageDialog(networkPanel, "Cost should be a positive number");
 				}
 			}
 		}

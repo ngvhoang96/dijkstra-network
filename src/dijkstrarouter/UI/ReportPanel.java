@@ -18,15 +18,18 @@ public class ReportPanel extends JPanel {
 		add(reportHeadLabel);
 
 		textArea = new JTextArea();
-		textArea.setBounds(0, 80, 400, 500);
 		textArea.setFont(new Font("Courier new", Font.PLAIN, 13));
 		textArea.setMargin(new Insets(30, 30, 30, 30));
 		textArea.setBackground(new Color(34, 34, 34));
 		textArea.setForeground(Color.white);
-		add(textArea);
 
 		showInstruction = true;
 		textArea.setText("1. Click Add a node to add a router\n2. Move Node to desired position\n3. Change Edit mode to draw links\n4. Click Run Dijkstra to see the report");
+
+		JScrollPane scrollablePanel = new JScrollPane(textArea);
+		scrollablePanel.setBounds(0, 80, 400, 500);
+		scrollablePanel.setBorder(null);
+		add(scrollablePanel);
 	}
 
 	void changeReport(String report) {
