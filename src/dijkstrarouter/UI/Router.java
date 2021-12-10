@@ -85,10 +85,16 @@ public class Router extends JPanel implements MouseListener, MouseMotionListener
 		if (makingLink) {
 			if (networkPanel.hoveringRouter != null && !networkPanel.hoveringRouter.routerName.equals(routerName)) {
 				String cost = JOptionPane.showInputDialog(String.format("What's the cost of %s ?", routerName + networkPanel.hoveringRouter));
-				networkPanel.connect(routerName + networkPanel.hoveringRouter, networkPanel.hoveringRouter, this, cost);
-				node.connectWith(networkPanel.hoveringRouter.getNode(), Integer.parseInt(cost));
-				makingLink = false;
-				networkPanel.drawAgain();
+				if (cost.length() > 0) {
+					try {
+						node.connectWith(networkPanel.hoveringRouter.getNode(), Integer.parseInt(cost));
+						networkPanel.connect(routerName + networkPanel.hoveringRouter, this, networkPanel.hoveringRouter, cost);
+						makingLink = false;
+						networkPanel.drawAgain();
+					} catch (RuntimeException ex) {
+						JOptionPane.showMessageDialog(networkPanel, ex.getMessage());
+					}
+				}
 			}
 		}
 	}

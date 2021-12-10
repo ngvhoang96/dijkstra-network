@@ -82,9 +82,9 @@ public class TestNode {
 	void distanceIsDifferentFromCostAndCanBeSet() {
 		Node nodeB = new Node("B");
 
-		nodeB.setDistanceFrom(nodeA, 3);
+		nodeB.setDistanceFromOrigin(nodeA, 3);
 
-		assertEquals(3, nodeB.getDistanceFrom(nodeA));
+		assertEquals(3, nodeB.getDistanceFromOrigin(nodeA));
 	}
 
 	@Test

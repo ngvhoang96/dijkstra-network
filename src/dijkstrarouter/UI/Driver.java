@@ -15,4 +15,8 @@ public class Driver extends JFrame {
 	public static void main(String[] args) {
 		new Driver();
 	}
+
+	public void restart() {
+		new Driver();
+	}
 }

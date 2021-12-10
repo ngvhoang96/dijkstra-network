@@ -25,6 +25,7 @@ public class TestNetwork {
 		network.add(nodeA);
 		network.add(nodeB);
 		network.add(nodeC);
+		network.setOrigin("A");
 	}
 
 	@Test
@@ -34,7 +35,7 @@ public class TestNetwork {
 
 	@Test
 	void eachNodeShowsZeroCostToOtherNodeOnInit() {
-		assertEquals("inf,B inf,C", network.getNodeReport());
+		assertEquals("inf   inf  ", network.getNodeReport());
 	}
 
 	@Test
@@ -43,7 +44,7 @@ public class TestNetwork {
 		nodeA.connectWith(nodeC, 3);
 		nodeB.connectWith(nodeC, 2);
 
-		assertEquals("1,B   3,C  ", network.getNodeReport());
+		assertEquals("1,null 3,null", network.getNodeReport());
 	}
 
 	@Test
@@ -52,23 +53,10 @@ public class TestNetwork {
 		nodeA.connectWith(nodeC, 3);
 		nodeB.connectWith(nodeC, 2);
 
-		assertEquals("1,B   3,C  ", network.getNodeReport());
+		assertEquals("1,null 3,null", network.getNodeReport());
 
-		nodeC.setDistanceFrom(nodeA, 2);
-		assertEquals("1,B   2,C  ", network.getNodeReport());
-	}
-
-	@Test
-	void eachNodeShowsCostsToSomeOtherNodes() {
-		network.add(nodeD);
-
-		nodeA.connectWith(nodeC, 1);
-		nodeA.connectWith(nodeD, 3);
-		nodeC.connectWith(nodeD, 1);
-		nodeC.connectWith(nodeB, 1);
-		nodeD.connectWith(nodeB, 2);
-
-		assertEquals("inf,B 1,C   3,D  ", network.getNodeReport());
+		nodeC.setDistanceFromOrigin(nodeA, 2);
+		assertEquals("1,null 2,null", network.getNodeReport());
 	}
 
 	@Test

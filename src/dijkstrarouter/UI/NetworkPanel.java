@@ -8,10 +8,12 @@ import java.util.List;
 public class NetworkPanel extends JPanel {
 	static JLabel editModeLabel;
 	private final HashMap<String, Edge> edgeList;
+	private final AppActionListener appActionListener;
 	public Router hoveringRouter;
 	private String editMode;
 
-	NetworkPanel(AppActionListener appActionListener) {
+	NetworkPanel(AppActionListener actionListener) {
+		appActionListener = actionListener;
 		setLayout(null);
 		setBounds(0, 0, 600, 600);
 
@@ -38,6 +40,12 @@ public class NetworkPanel extends JPanel {
 		runAlgo.addActionListener(appActionListener);
 		runAlgo.setBounds(220, 500, 100, 50);
 		add(runAlgo);
+
+		JButton restartButton = new JButton("Reset");
+		restartButton.setActionCommand("restart");
+		restartButton.addActionListener(appActionListener);
+		restartButton.setBounds(400, 500, 100, 50);
+		add(restartButton);
 	}
 
 	public void toggleEditMode() {
@@ -50,8 +58,8 @@ public class NetworkPanel extends JPanel {
 	}
 
 	public void connect(String path, Router origin, Router destination, String cost) {
-		System.out.println("Adding " + path);
 		Edge edge = new Edge(origin, destination, cost);
+		appActionListener.logToReport(String.format("%s -> %s: %s", origin, destination, cost));
 		edgeList.put(path, edge);
 	}
 
@@ -61,6 +69,7 @@ public class NetworkPanel extends JPanel {
 	}
 
 	public void drawSelectedEdges(List<String> selectedEdges) {
+		System.out.println(selectedEdges);
 		super.paint(getGraphics());
 		edgeList.forEach((s, edge) -> {
 			String reserveS = new StringBuilder().append(s).reverse().toString();

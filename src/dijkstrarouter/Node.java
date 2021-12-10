@@ -29,7 +29,7 @@ public class Node {
 		previousNode = thePreviousNode;
 	}
 
-	public int getDistanceFrom(Node origin) {
+	public int getDistanceFromOrigin(Node origin) {
 		if (distanceFromOrigin != 0) {
 			return distanceFromOrigin;
 		} else if (getCostTo(origin) != INFINITY) {
@@ -39,13 +39,13 @@ public class Node {
 		}
 	}
 
-	public void setDistanceFrom(Node origin, int distance) {
+	public void setDistanceFromOrigin(Node origin, int distance) {
 		distanceFromOrigin = distance;
 	}
 
 	public void connectWith(Node otherNode, int cost) {
 		if (neighbors.contains(otherNode)) {
-			throw new RuntimeException("Please disconnect node " + otherNode.getNodeName() + " before reconnect");
+			throw new RuntimeException(thisNodeName + " -> " + otherNode.getNodeName() + " already exists");
 		} else {
 			neighbors.add(otherNode);
 			edgesList.put(otherNode, cost);
@@ -92,5 +92,10 @@ public class Node {
 		});
 
 		return closestNeighbor.toString();
+	}
+
+	public void reset() {
+		previousNode = null;
+		distanceFromOrigin = 0;
 	}
 }
